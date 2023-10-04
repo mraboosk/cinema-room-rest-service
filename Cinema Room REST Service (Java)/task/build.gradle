@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$hs.spring.bootVersion"
+        classpath "io.spring.gradle:dependency-management-plugin:$hs.spring.dependencyManagementVersion"
+    }
+}
+plugins {
+    id 'com.diffplug.spotless' version '6.22.0' apply true
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'com.diffplug.gradle.spotless'
+
+
+repositories {
+    mavenCentral()
+}
+spotless {
+    java {
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        // optional: you can specify a specific version (>= 1.8) and/or switch to AOSP style
+        //   and/or reflow long strings
+        //   and/or use custom group artifact (you probably don't need this)
+//        googleJavaFormat('1.11').aosp().reflowLongStrings().formatJavadoc(false).reorderImports(false).groupArtifact('com.google.googlejavaformat:google-java-format')
+        googleJavaFormat();
+    }
+}
+
+
+sourceSets.main.resources.srcDirs = ["src/resources"]
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.diffplug.spotless:spotless-plugin-gradle:6.22.0'
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+}
+
+test {
+    jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
+}
